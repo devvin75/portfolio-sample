@@ -3,16 +3,50 @@ import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 import NavLink from "./navLink";
+import {motion} from "framer-motion";
+
+const links = [
+  { url: "/", title: "Home" },
+  { url: "/about", title: "About" },
+  { url: "/portfolio", title: "Portfolio" },
+  { url: "/contact", title: "Contact" },
+];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const links = [
-    { url: "/", title: "Home" },
-    { url: "/about", title: "About" },
-    { url: "/portfolio", title: "Portfolio" },
-    { url: "/contact", title: "Contact" },
-  ];
+  
+  const topVariants = {
+    // If it is close we are not going to have any rotation
+    closed: {
+      rotate:0,
+    },
 
+    opened: {
+      rotate: 45,
+      backgroundColor: "rgb(255, 255, 0, 255)"
+    }
+  }
+    const centerVariants = {
+      closed:{
+        opacity:1, //visible
+      },
+      opened:{
+        opacity:0, //invisible
+      }
+    }
+
+     const bottomVariants = {
+      closed:{
+        rotate:0, 
+      },
+      opened:{
+        rotate: -45,
+        backgroundColor: "rgb(255, 255, 255, 255)"
+      }
+     } 
+
+
+  
   return (
     
       <div className="h-full flex items-center justify-between px-4 sm:px-8 md:px-12 lg:px-20 xl:px-48 text-xl">
@@ -58,12 +92,18 @@ const Navbar = () => {
         </div>
         {/* Rightmost Menu Button */}
         <div className="md:hidden">
-          {/* Menu button */}
-          <button className="w-10 h-8 flex rounded-md flex-col justify-between z-50 relative"
+          {/* Menu "burger "button */}
+          <button  className="w-10 h-8 flex rounded-md flex-col justify-between z-50 relative"
             onClick={() => setOpen(!open)}> 
-            <div className="w-10 h-1 bg-white rounded"></div>
-            <div className="w-10 h-1 bg-white rounded"></div>
-            <div className="w-10 h-1 bg-white rounded"></div>
+            <motion.div variants={topVariants} 
+                        animate={open ? "opened" : closed}
+                        className="w-10 h-1 bg-black rounded"></motion.div>
+            <motion.div variants={centerVariants} 
+                        animate={open ? "opened" : closed}
+                        className="w-10 h-1 bg-black rounded"></motion.div>
+            <motion.div variants={bottomVariants }
+                        animate={open ? "opened" : closed}    
+                        className="w-10 h-1 bg-black rounded"></motion.div>
           </button>
         </div>
         {/* Menu List */}
@@ -75,11 +115,10 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-        )}
-        
-      </div>
-    
+        )}        
+      </div>    
   );
-};
+  
+}
 
 export default Navbar;
